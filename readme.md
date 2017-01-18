@@ -51,6 +51,21 @@ In case you want to allow all regular file types including video, music, compres
 A mimetype consists of a primary and secondary type. The primary type can be `image`, `video` and `application` for instance. The secondary
 is like a more detailed specification, eg `png`, `pdf` etc. These two are divided by a `/`, in regex you have to escape this character by using: `\/`.
 
+### Custom adapters
+
+In case you want to extend the functionality of this extension with your own proprietary upload adapter, use the following
+procedure:
+
+- Choose a unique key for you adapter (eg `custom-local`).
+- Create your adapter (eg `Acme\Upload\Adapters\CustomLocal`), it has to implement the interface `Flagrow\Upload\Contracts\UploadAdapter`.
+- Create a service provider and register it in the `bootstrap.php` of your extension.
+- In the `register` method of your provider, bind the adapter into the service container and register it into the upload extension:
+```php
+\Flagrow\Upload\Helpers::registerAdapter('custom-local', 'Your custom local');
+$this->app->bind('flagrow.upload-adapter.custom-local', function($app) {
+    return new \Acme\Upload\Adapters\CustomLocal;
+});
+```
 
 ### donate
 

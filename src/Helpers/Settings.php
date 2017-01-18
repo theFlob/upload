@@ -28,6 +28,11 @@ class Settings
     const DEFAULT_MAX_IMAGE_WIDTH = 100;
 
     /**
+     * @var array
+     */
+    static protected $customAdapters = [];
+
+    /**
      * The settings shared with the frontend.
      *
      * @var array
@@ -193,7 +198,8 @@ class Settings
             })
             ->map(function ($item) {
                 return app('translator')->trans('flagrow-upload.admin.upload_methods.' . $item);
-            });
+            })
+            ->merge(static::$customAdapters);
     }
 
     /**
@@ -228,5 +234,14 @@ class Settings
             'mimeTypes',
             collect(['^image\/.*' => 'local'])
         );
+    }
+
+    /**
+     * @param $key
+     * @param $translation
+     */
+    public static function registerAdapter($key, $translation)
+    {
+        static::$customAdapters[$key] = $translation;
     }
 }
